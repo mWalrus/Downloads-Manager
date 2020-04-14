@@ -1,0 +1,15 @@
+bak
+cab
+cfg
+cpl
+cur
+dll
+dmp
+drv
+icns
+ico
+ini
+ink
+msi
+sys
+tmp

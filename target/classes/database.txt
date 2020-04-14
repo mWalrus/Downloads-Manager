@@ -1,0 +1,11 @@
+csv
+dat
+db
+dbf
+log
+mdb
+sav
+sql
+tar
+xml
+json

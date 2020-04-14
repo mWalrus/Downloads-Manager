@@ -1,0 +1,8 @@
+email
+eml
+emlx
+msg
+oft
+ost
+pst
+vcf
