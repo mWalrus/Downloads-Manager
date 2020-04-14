@@ -1,5 +1,0 @@
-bin
-dmg
-iso
-toast
-vcd

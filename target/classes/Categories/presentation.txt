@@ -1,5 +1,0 @@
-key
-odp
-pps
-ppt
-pptx

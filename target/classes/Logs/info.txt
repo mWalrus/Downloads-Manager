@@ -1,3 +1,0 @@
-A small script that sorts your Downloads folder automatically when a new download is initiated.
-It looks at the newly downloaded file's extension and determines a category from that.
-Nothing needs to be configured. Just run it and it takes care of the rest.

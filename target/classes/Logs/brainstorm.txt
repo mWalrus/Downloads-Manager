@@ -1,2 +1,0 @@
-okay, i want to be able to distinguish when the download process of a file has been completed.
-i want to check if crdownload has been deleted before handling file

@@ -1,9 +1,0 @@
-7z
-arj
-deb
-pkg
-rar
-rpm
-tar
-z
-zip
