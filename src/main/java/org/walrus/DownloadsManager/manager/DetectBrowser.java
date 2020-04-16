@@ -26,7 +26,6 @@ public class DetectBrowser {
             }
             String JSONString = sb.toString();
             JSONObject object = (JSONObject) new JSONParser().parse(JSONString);
-            System.out.println(object.get("browser").toString());
             browser = object.get("browser").toString();
         } catch (ParseException | IOException e) {
             e.printStackTrace();

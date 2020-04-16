@@ -32,7 +32,7 @@ public class Sorter implements IntSorter {
         try {
             WatchService ws = FileSystems.getDefault().newWatchService();
             Path downloads = Paths.get(downloadsPath);
-            downloads.register(ws, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_CREATE);
+            downloads.register(ws, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY);
             while (true) {
                 boolean crDownloadDeleted = false;
                 WatchKey wk = ws.take();
@@ -289,7 +289,7 @@ public class Sorter implements IntSorter {
     }
 
     private void handleFirefoxDownloads(String kind, String fileName, String ext) {
-
+        System.out.println("kind: " + kind + "\nfile name: " + fileName);
     }
 
     ArrayList<String> getKindAndFileInfo (WatchEvent<?> event) {
@@ -302,5 +302,11 @@ public class Sorter implements IntSorter {
         collection.add(fileName);
         collection.add(ext);
         return collection;
+    }
+
+    void changeBrowser () {
+        DetectBrowser db = new DetectBrowser();
+        db.promptForBrowser();
+        this.browser = db.getBrowser();
     }
 }

@@ -38,11 +38,13 @@ public class Systray {
                 folders.add(cat);
             }
 
+            MenuItem changeBrowser = new MenuItem("Change Browser");
             MenuItem logs = new MenuItem("Logs");
             MenuItem info = new MenuItem("Info");
             MenuItem reload = new MenuItem("Reload");
             MenuItem exit = new MenuItem("Exit");
             popup.add(folders);
+            popup.add(changeBrowser);
             popup.add(logs);
             popup.add(info);
             popup.add(reload);
@@ -62,6 +64,10 @@ public class Systray {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+            });
+
+            changeBrowser.addActionListener((e) -> {
+                s.changeBrowser();
             });
 
             logs.addActionListener((e) -> {
