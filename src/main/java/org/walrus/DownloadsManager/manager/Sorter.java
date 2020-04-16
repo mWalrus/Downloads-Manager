@@ -7,11 +7,9 @@ import org.json.simple.parser.ParseException;
 import java.awt.*;
 import java.io.*;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import javax.swing.*;
@@ -21,6 +19,45 @@ public class Sorter implements IntSorter {
     public Sorter(){}
 
     /**
+     * Listens for user initiated downloads by checking if the Downloads folder is getting modified at any given moment
+     * @throws IOException
+     */
+    public void listenForDownloads() throws IOException {
+        this.logToFile("info", "Listening for downloads...");
+        try {
+            WatchService ws = FileSystems.getDefault().newWatchService();
+            Path downloads = Paths.get(downloadsPath);
+            downloads.register(ws, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_CREATE);
+            while (true) {
+                boolean crDownloadDeleted = false;
+                WatchKey wk = ws.take();
+
+                for (WatchEvent<?> event : wk.pollEvents()) {
+                    ArrayList<String> info = this.getKindAndFileInfo(event);
+                    String kind = info.get(0), fileName = info.get(1), ext = info.get(2);
+                    if (ext.equals("tmp") && kind.equals("ENTRY_CREATE")) {
+                        this.logToFile("info", "A new download has been detected, waiting for it to finish...");
+                    }
+
+                    if (ext.equals("crdownload") && kind.equals("ENTRY_DELETE")) {
+                        this.logToFile("info", "Download finished!");
+                        crDownloadDeleted = true;
+                    }
+
+                    if (crDownloadDeleted && !ext.equals("tmp") && !ext.equals("crdownload")) {
+                        this.checkFile(fileName, true);
+                        crDownloadDeleted = false;
+                    }
+                }
+
+                wk.reset();
+            }
+        } catch (InterruptedException | ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+        /**
      * Starts the file categorization process
      * @param fileName name of the file (including extension)
      * @param wasDownloadedNow true if file was downloaded just before (exists to decide whether to open the file after categorization)
@@ -198,7 +235,8 @@ public class Sorter implements IntSorter {
     }
 
     /**
-     * Creates a window with three options (open folder of newly downloaded  file, open that file directly or close window)
+     * Creates a window with three options
+     * (open folder of newly downloaded file, open that file with standard application or close window)
      * @param folderPath folder to open
      * @param fileName file to open
      * @throws IOException
@@ -234,5 +272,17 @@ public class Sorter implements IntSorter {
                 this.logToFile("error", e.toString());
             }
         }
+    }
+
+    ArrayList<String> getKindAndFileInfo (WatchEvent<?> event) {
+        ArrayList<String> collection = new ArrayList<>();
+        String kind = event.kind().toString();
+        String fileName = event.context().toString();
+        String[] fileNameSplit = fileName.split("\\.");
+        String ext = fileNameSplit[fileNameSplit.length - 1];
+        collection.add(kind);
+        collection.add(fileName);
+        collection.add(ext);
+        return collection;
     }
 }

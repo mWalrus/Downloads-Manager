@@ -17,6 +17,8 @@ public interface IntSorter {
             "and whenever a new download is detected. ";
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd @ HH:mm:ss");
 
+    void listenForDownloads() throws IOException;
+
     void checkFile(String var1, boolean var2) throws IOException, ParseException, InterruptedException;
 
     void sortFileToFolder(String var1, String var2, boolean var3) throws IOException, InterruptedException;

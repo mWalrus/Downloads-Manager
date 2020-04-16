@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a023a14f-def3-4363-bc9f-6fce4806bfe4" name="Default Changelist" comment="" />
+    <list default="true" id="a023a14f-def3-4363-bc9f-6fce4806bfe4" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/walrus/DownloadsManager/manager/IntSorter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/walrus/DownloadsManager/manager/IntSorter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/walrus/DownloadsManager/manager/Sorter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/walrus/DownloadsManager/manager/Sorter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/walrus/DownloadsManager/manager/SorterMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/walrus/DownloadsManager/manager/SorterMain.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -29,7 +34,9 @@
     <option name="delegateBuildToMaven" value="true" />
   </component>
   <component name="ProjectId" id="1ZGo5h8Q8OEwe9gWdfQE01fjHr8" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -108,7 +115,8 @@
       <workItem from="1585984473977" duration="1386000" />
       <workItem from="1586869610564" duration="5346000" />
       <workItem from="1586881970352" duration="3342000" />
-      <workItem from="1586890545231" duration="755000" />
+      <workItem from="1586890545231" duration="2606000" />
+      <workItem from="1587047757962" duration="11448000" />
     </task>
     <servers />
   </component>
@@ -144,25 +152,25 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="274" key="FileChooserDialogImpl/-1920.0.1920.1040/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1584490937431" />
-    <state width="1877" height="153" key="GridCell.Tab.0.bottom" timestamp="1586874737389">
+    <state width="1877" height="251" key="GridCell.Tab.0.bottom" timestamp="1587062212969">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="153" key="GridCell.Tab.0.bottom/-1920.0.1920.1040/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586874737389" />
+    <state width="1877" height="251" key="GridCell.Tab.0.bottom/-1920.0.1920.1040/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1587062212969" />
     <state width="1877" height="153" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1585985153387" />
-    <state width="1877" height="153" key="GridCell.Tab.0.center" timestamp="1586874737389">
+    <state width="1877" height="251" key="GridCell.Tab.0.center" timestamp="1587062212969">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="153" key="GridCell.Tab.0.center/-1920.0.1920.1040/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586874737389" />
+    <state width="1877" height="251" key="GridCell.Tab.0.center/-1920.0.1920.1040/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1587062212969" />
     <state width="1877" height="153" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1585985153387" />
-    <state width="1877" height="153" key="GridCell.Tab.0.left" timestamp="1586874737388">
+    <state width="1877" height="251" key="GridCell.Tab.0.left" timestamp="1587062212969">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="153" key="GridCell.Tab.0.left/-1920.0.1920.1040/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586874737388" />
+    <state width="1877" height="251" key="GridCell.Tab.0.left/-1920.0.1920.1040/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1587062212969" />
     <state width="1877" height="153" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1585985153386" />
-    <state width="1877" height="153" key="GridCell.Tab.0.right" timestamp="1586874737389">
+    <state width="1877" height="251" key="GridCell.Tab.0.right" timestamp="1587062212969">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="153" key="GridCell.Tab.0.right/-1920.0.1920.1040/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1586874737389" />
+    <state width="1877" height="251" key="GridCell.Tab.0.right/-1920.0.1920.1040/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1587062212969" />
     <state width="1877" height="153" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1585985153387" />
     <state x="440" y="94" key="SettingsEditor" timestamp="1584574757264">
       <screen x="0" y="0" width="1920" height="1040" />
