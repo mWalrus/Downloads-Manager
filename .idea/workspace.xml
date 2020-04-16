@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a023a14f-def3-4363-bc9f-6fce4806bfe4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/walrus/DownloadsManager/manager/DetectBrowser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/walrus/DownloadsManager/manager/ConfigBrowser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/walrus/DownloadsManager/manager/Sorter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/walrus/DownloadsManager/manager/Sorter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/walrus/DownloadsManager/manager/Systray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/walrus/DownloadsManager/manager/Systray.java" afterDir="false" />
-    </list>
+    <list default="true" id="a023a14f-def3-4363-bc9f-6fce4806bfe4" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -116,7 +111,7 @@
       <workItem from="1586869610564" duration="5346000" />
       <workItem from="1586881970352" duration="3342000" />
       <workItem from="1586890545231" duration="2606000" />
-      <workItem from="1587047757962" duration="15175000" />
+      <workItem from="1587047757962" duration="15484000" />
     </task>
     <servers />
   </component>
