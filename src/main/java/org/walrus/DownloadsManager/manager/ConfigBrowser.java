@@ -8,10 +8,10 @@ import org.json.simple.parser.ParseException;
 import javax.swing.*;
 import java.io.*;
 
-public class DetectBrowser {
-    File browserFile = new File("./browser/default-browser.json");
+public class ConfigBrowser {
+    File browserFile = new File("./browser/user-browser.json");
 
-    DetectBrowser () {
+    ConfigBrowser() {
         if (!fileExists()) promptForBrowser();
     }
 

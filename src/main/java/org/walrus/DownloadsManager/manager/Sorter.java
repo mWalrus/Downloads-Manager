@@ -19,7 +19,7 @@ public class Sorter implements IntSorter {
     String browser;
 
     public Sorter(){
-        DetectBrowser db = new DetectBrowser();
+        ConfigBrowser db = new ConfigBrowser();
         this.browser = db.getBrowser();
     }
 
@@ -305,7 +305,7 @@ public class Sorter implements IntSorter {
     }
 
     void changeBrowser () {
-        DetectBrowser db = new DetectBrowser();
+        ConfigBrowser db = new ConfigBrowser();
         db.promptForBrowser();
         this.browser = db.getBrowser();
     }

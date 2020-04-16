@@ -138,7 +138,9 @@ public class Systray {
     @SuppressWarnings("all")
     public ArrayList<String> getExistingCategories () {
         ArrayList<String> foundCategories = new ArrayList<>();
-        new File(downloadsPath).listFiles(e -> foundCategories.add(e.getName()));
+        for (File file : new File(downloadsPath).listFiles()) {
+            if (file.isDirectory()) foundCategories.add(file.getName());
+        }
         return foundCategories;
     }
 }
