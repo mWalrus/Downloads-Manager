@@ -16,7 +16,12 @@ import javax.swing.*;
 
 public class Sorter implements IntSorter {
 
-    public Sorter(){}
+    String browser;
+
+    public Sorter(){
+        DetectBrowser db = new DetectBrowser();
+        this.browser = db.getBrowser();
+    }
 
     /**
      * Listens for user initiated downloads by checking if the Downloads folder is getting modified at any given moment
@@ -35,19 +40,10 @@ public class Sorter implements IntSorter {
                 for (WatchEvent<?> event : wk.pollEvents()) {
                     ArrayList<String> info = this.getKindAndFileInfo(event);
                     String kind = info.get(0), fileName = info.get(1), ext = info.get(2);
-                    if (ext.equals("tmp") && kind.equals("ENTRY_CREATE")) {
-                        this.logToFile("info", "A new download has been detected, waiting for it to finish...");
+                    if (this.browser.equals("Chrome")) {
+                        crDownloadDeleted = this.handleChromeDownloads(kind, fileName, ext, crDownloadDeleted);
                     }
-
-                    if (ext.equals("crdownload") && kind.equals("ENTRY_DELETE")) {
-                        this.logToFile("info", "Download finished!");
-                        crDownloadDeleted = true;
-                    }
-
-                    if (crDownloadDeleted && !ext.equals("tmp") && !ext.equals("crdownload")) {
-                        this.checkFile(fileName, true);
-                        crDownloadDeleted = false;
-                    }
+                    else if (this.browser.equals("Firefox")) this.handleFirefoxDownloads(kind, fileName, ext);
                 }
 
                 wk.reset();
@@ -57,7 +53,7 @@ public class Sorter implements IntSorter {
         }
     }
 
-        /**
+    /**
      * Starts the file categorization process
      * @param fileName name of the file (including extension)
      * @param wasDownloadedNow true if file was downloaded just before (exists to decide whether to open the file after categorization)
@@ -272,6 +268,28 @@ public class Sorter implements IntSorter {
                 this.logToFile("error", e.toString());
             }
         }
+    }
+
+    private boolean handleChromeDownloads (String kind, String fileName, String ext, boolean crDownloadDeleted) throws IOException, ParseException, InterruptedException {
+        boolean cdl = crDownloadDeleted;
+        if (ext.equals("tmp") && kind.equals("ENTRY_CREATE")) {
+            this.logToFile("info", "A new download has been detected, waiting for it to finish...");
+        }
+
+        if (ext.equals("crdownload") && kind.equals("ENTRY_DELETE")) {
+            this.logToFile("info", "Download finished!");
+            cdl = true;
+        }
+
+        if (crDownloadDeleted && !ext.equals("tmp") && !ext.equals("crdownload")) {
+            this.checkFile(fileName, true);
+            cdl = false;
+        }
+        return cdl;
+    }
+
+    private void handleFirefoxDownloads(String kind, String fileName, String ext) {
+
     }
 
     ArrayList<String> getKindAndFileInfo (WatchEvent<?> event) {
