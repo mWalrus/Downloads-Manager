@@ -7,6 +7,8 @@ import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class ConfigBrowser {
     File browserFile = new File("./browser/user-browser.json");
@@ -53,14 +55,19 @@ public class ConfigBrowser {
     }
 
     public void promptForBrowser() {
-        Object[] choices = {"Chrome", "Firefox"};
-        String input = (String) JOptionPane.showInputDialog(null,
-                "Select your browser",
-                "Downloads Manager",
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                choices,
-                choices[0]);
-        setBrowser(input);
+        try {
+            Object[] choices = {"Chrome", "Firefox"};
+            String input = (String) JOptionPane.showInputDialog(null,
+                    "Select your browser",
+                    "Downloads Manager",
+                    JOptionPane.QUESTION_MESSAGE,
+                    new ImageIcon(new URL(Sorter.class.getResource("/logo.png").toString())),
+                    choices,
+                    choices[0]);
+            setBrowser(input);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
     }
 }

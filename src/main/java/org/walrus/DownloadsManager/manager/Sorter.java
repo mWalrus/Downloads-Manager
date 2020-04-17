@@ -5,6 +5,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.*;
@@ -239,35 +241,49 @@ public class Sorter implements IntSorter {
      */
     @Override
     public void displayDialog(String folderPath, String fileName) throws IOException {
-        Object[] options = {
-          "Open folder",
-          "Open file",
-          "Close"
+        JButton openFolder = new JButton("Open folder");
+        JButton openFile = new JButton("Open file");
+        JButton close = new JButton("Close");
+        JButton[] options = {
+          openFolder,
+                openFile,
+                close
+
         };
-        int option = JOptionPane.showOptionDialog(null,
-                fileName + " was downloaded. Select action:",
-                "DownloadsManager",
+
+        for (JButton b : options) {
+            b.setBackground(Color.decode("#6f2dbd"));
+            b.setForeground(Color.decode("#fffffa"));
+            b.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        }
+
+        openFolder.addActionListener(e -> {
+            try {
+                this.openPath(folderPath);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+        openFile.addActionListener(e -> {
+            try {
+                this.openPath(folderPath + "\\" + fileName);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+        close.addActionListener(e -> JOptionPane.getRootFrame().dispose());
+
+        JLabel label = new JLabel(fileName + " was downloaded. Select action:");
+        label.setForeground(Color.decode("#fffaff"));
+
+        JOptionPane.showOptionDialog(null,
+                label,
+                "Downloads Manager",
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 new ImageIcon(new URL(Sorter.class.getResource("/logo.png").toString())),
                 options,
                 options[0]);
-        String pathToOpen = "";
-        switch (option) {
-            case 0:
-                pathToOpen = folderPath;
-                break;
-            case 1:
-                pathToOpen = folderPath + "\\" + fileName;
-                break;
-        }
-        if (pathToOpen.length() > 0) {
-            try {
-                this.openPath(pathToOpen);
-            } catch (IOException e) {
-                this.logToFile("error", e.toString());
-            }
-        }
     }
 
     private boolean handleChromeDownloads (String kind, String fileName, String ext, boolean crDownloadDeleted) throws IOException, ParseException, InterruptedException {
