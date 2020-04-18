@@ -6,6 +6,7 @@ import org.json.simple.parser.ParseException;
 
 import java.awt.*;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.*;
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import javax.swing.*;
 public class Sorter implements IntSorter {
 
     String browser;
+    JFrame frame;
 
     public Sorter(){
         ConfigBrowser db = new ConfigBrowser();
@@ -253,6 +255,7 @@ public class Sorter implements IntSorter {
             b.setBackground(Color.decode("#8367c7"));
             b.setForeground(Color.decode("#fffffa"));
             b.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            b.setSize(new Dimension(80, 20));
         }
 
         openFolder.addActionListener(e -> {
@@ -269,20 +272,18 @@ public class Sorter implements IntSorter {
                 ex.printStackTrace();
             }
         });
-        close.addActionListener(e -> JOptionPane.getRootFrame().dispose());
+        close.addActionListener(e -> frame.dispose());
 
-        JLabel label = new JLabel(fileName + " was downloaded. Select action:");
+        JLabel label = new JLabel("<html>" + fileName + " was downloaded. <br>Select action:<html>", SwingConstants.CENTER);
         label.setForeground(Color.decode("#fffaff"));
         label.setBackground(Color.decode("#2c2c34"));
 
-        JOptionPane.showOptionDialog(null,
-                label,
-                "Downloads Manager",
-                JOptionPane.YES_NO_CANCEL_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                new ImageIcon(new URL(Sorter.class.getResource("/logo.png").toString())),
-                options,
-                options[0]);
+        JPanel textPanel = new JPanel(new BorderLayout());
+        JPanel buttonPanel = new JPanel(new GridLayout(1,3,40,0));
+        JPanel outerPanel = new JPanel(new BorderLayout());
+
+        UI frame = new UI();
+        frame.createUI(label, options, outerPanel, textPanel, buttonPanel, 500, 170);
     }
 
     private boolean handleChromeDownloads (String kind, String fileName, String ext, boolean crDownloadDeleted) throws IOException, ParseException, InterruptedException {

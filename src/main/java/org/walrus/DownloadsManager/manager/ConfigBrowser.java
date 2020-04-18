@@ -7,6 +7,7 @@ import org.json.simple.parser.ParseException;
 
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.io.*;
 import java.net.MalformedURLException;
@@ -14,6 +15,8 @@ import java.net.URL;
 
 public class ConfigBrowser {
     File browserFile = new File("./browser/user-browser.json");
+
+    JFrame frame;
 
     ConfigBrowser() {
         if (!fileExists()) promptForBrowser();
@@ -65,29 +68,22 @@ public class ConfigBrowser {
             b.setBackground(Color.decode("#8367c7"));
             b.setForeground(Color.decode("#fffffa"));
             b.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            b.setFocusPainted(false);
             b.addActionListener(e -> {
                 setBrowser(e.getActionCommand());
-                JOptionPane.getRootFrame().dispose();
+                frame.dispose();
             });
         }
 
-        JLabel label = new JLabel("Select your browser:");
+        JLabel label = new JLabel("Select your browser:", SwingConstants.CENTER);
         label.setBackground(Color.decode("#2c2c34"));
         label.setForeground(Color.decode("#fff4ff"));
-        label.setHorizontalAlignment(JLabel.CENTER);
 
-        try {
-            JOptionPane.showOptionDialog(null,
-                    label,
-                    "Downloads Manager",
-                    JOptionPane.YES_NO_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    new ImageIcon(new URL(Sorter.class.getResource("/logo.png").toString())),
-                    buttons,
-                    buttons[0]
-            );
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        JPanel textPanel = new JPanel(new BorderLayout());
+        JPanel btnPanel = new JPanel(new GridLayout(1, 2, 20, 0));
+        JPanel outerPanel = new JPanel(new BorderLayout());
+
+        UI frame = new UI();
+        frame.createUI(label, buttons, outerPanel, textPanel, btnPanel, 300, 150);
     }
 }
