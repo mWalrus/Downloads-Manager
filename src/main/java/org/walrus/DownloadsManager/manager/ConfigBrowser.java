@@ -5,7 +5,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -55,19 +57,37 @@ public class ConfigBrowser {
     }
 
     public void promptForBrowser() {
+        JButton chrome = new JButton("Chrome");
+        JButton fireFox = new JButton("Firefox");
+        JButton[] buttons = {chrome, fireFox};
+
+        for (JButton b : buttons) {
+            b.setBackground(Color.decode("#8367c7"));
+            b.setForeground(Color.decode("#fffffa"));
+            b.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            b.addActionListener(e -> {
+                setBrowser(e.getActionCommand());
+                JOptionPane.getRootFrame().dispose();
+            });
+        }
+
+        JLabel label = new JLabel("Select your browser:");
+        label.setBackground(Color.decode("#2c2c34"));
+        label.setForeground(Color.decode("#fff4ff"));
+        label.setHorizontalAlignment(JLabel.CENTER);
+
         try {
-            Object[] choices = {"Chrome", "Firefox"};
-            String input = (String) JOptionPane.showInputDialog(null,
-                    "Select your browser",
+            JOptionPane.showOptionDialog(null,
+                    label,
                     "Downloads Manager",
+                    JOptionPane.YES_NO_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE,
                     new ImageIcon(new URL(Sorter.class.getResource("/logo.png").toString())),
-                    choices,
-                    choices[0]);
-            setBrowser(input);
+                    buttons,
+                    buttons[0]
+            );
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
     }
 }

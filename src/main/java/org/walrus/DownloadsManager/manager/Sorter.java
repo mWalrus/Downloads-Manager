@@ -5,8 +5,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.*;
@@ -252,7 +250,7 @@ public class Sorter implements IntSorter {
         };
 
         for (JButton b : options) {
-            b.setBackground(Color.decode("#6f2dbd"));
+            b.setBackground(Color.decode("#8367c7"));
             b.setForeground(Color.decode("#fffffa"));
             b.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         }
@@ -275,6 +273,7 @@ public class Sorter implements IntSorter {
 
         JLabel label = new JLabel(fileName + " was downloaded. Select action:");
         label.setForeground(Color.decode("#fffaff"));
+        label.setBackground(Color.decode("#2c2c34"));
 
         JOptionPane.showOptionDialog(null,
                 label,
