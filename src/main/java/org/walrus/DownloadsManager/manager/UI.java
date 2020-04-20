@@ -11,6 +11,7 @@ public class UI {
         lblPan.add(lbl);
 
         for (JButton b : buttons) {
+            b.addActionListener(e -> frame.dispose());
             btnPan.add(b);
         }
 
@@ -22,6 +23,7 @@ public class UI {
         outPan.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
         frame = new JFrame("Downloads Manager");
+        frame.setLocationRelativeTo(null);
         try {
             frame.setIconImage(new ImageIcon(new URL(Sorter.class.getResource("/logo.png").toString())).getImage());
         } catch (MalformedURLException e) {
@@ -30,5 +32,6 @@ public class UI {
         frame.add(outPan);
         frame.setSize(width, height);
         frame.setVisible(true);
+        frame.toFront();
     }
 }

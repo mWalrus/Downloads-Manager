@@ -13,17 +13,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.List;
 import javax.swing.*;
 
 public class Sorter implements IntSorter {
-
-    String browser;
     JFrame frame;
-
-    public Sorter(){
-        ConfigBrowser db = new ConfigBrowser();
-        this.browser = db.getBrowser();
-    }
+    File currentFile;
+    boolean foundFile;
 
     /**
      * Listens for user initiated downloads by checking if the Downloads folder is getting modified at any given moment
@@ -36,17 +32,9 @@ public class Sorter implements IntSorter {
             Path downloads = Paths.get(downloadsPath);
             downloads.register(ws, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY);
             while (true) {
-                boolean crDownloadDeleted = false;
                 WatchKey wk = ws.take();
 
-                for (WatchEvent<?> event : wk.pollEvents()) {
-                    ArrayList<String> info = this.getKindAndFileInfo(event);
-                    String kind = info.get(0), fileName = info.get(1), ext = info.get(2);
-                    if (this.browser.equals("Chrome")) {
-                        crDownloadDeleted = this.handleChromeDownloads(kind, fileName, ext, crDownloadDeleted);
-                    }
-                    else if (this.browser.equals("Firefox")) this.handleFirefoxDownloads(kind, fileName, ext);
-                }
+                handleDownloads(wk.pollEvents());
 
                 wk.reset();
             }
@@ -104,6 +92,7 @@ public class Sorter implements IntSorter {
             TimeUnit.SECONDS.sleep(1);
             String categoryPath = downloadsPath + "\\" + folderToMoveTo;
             this.displayDialog(categoryPath, fileName);
+            foundFile = false;
         }
 
     }
@@ -286,43 +275,34 @@ public class Sorter implements IntSorter {
         frame.createUI(label, options, outerPanel, textPanel, buttonPanel, 500, 170);
     }
 
-    private boolean handleChromeDownloads (String kind, String fileName, String ext, boolean crDownloadDeleted) throws IOException, ParseException, InterruptedException {
-        boolean cdl = crDownloadDeleted;
-        if (ext.equals("tmp") && kind.equals("ENTRY_CREATE")) {
-            this.logToFile("info", "A new download has been detected, waiting for it to finish...");
+    private void handleDownloads (List<WatchEvent<?>> events) throws InterruptedException, ParseException, IOException {
+        String fileName = "";
+        for (WatchEvent<?> event : events){
+            String[] split = event.context().toString().split("\\.");
+            String temp = split[split.length - 1];
+            if (!temp.equals("tmp") && !temp.equals("crdownload") && !temp.equals(".part")) {
+                fileName = event.context().toString();
+            }
         }
-
-        if (ext.equals("crdownload") && kind.equals("ENTRY_DELETE")) {
-            this.logToFile("info", "Download finished!");
-            cdl = true;
+        if (fileName.length() > 0 && !foundFile) {
+            File temp = new File(downloadsPath + "\\" + fileName);
+            if (!temp.equals(currentFile)) {
+                currentFile = new File(downloadsPath + "\\" + fileName);
+                foundFile = true;
+            }
         }
-
-        if (crDownloadDeleted && !ext.equals("tmp") && !ext.equals("crdownload")) {
-            this.checkFile(fileName, true);
-            cdl = false;
-        }
-        return cdl;
+        checkFileSize(fileName);
     }
 
-    private void handleFirefoxDownloads(String kind, String fileName, String ext) {
-        System.out.println("kind: " + kind + "\nfile name: " + fileName);
-    }
-
-    ArrayList<String> getKindAndFileInfo (WatchEvent<?> event) {
-        ArrayList<String> collection = new ArrayList<>();
-        String kind = event.kind().toString();
-        String fileName = event.context().toString();
-        String[] fileNameSplit = fileName.split("\\.");
-        String ext = fileNameSplit[fileNameSplit.length - 1];
-        collection.add(kind);
-        collection.add(fileName);
-        collection.add(ext);
-        return collection;
-    }
-
-    void changeBrowser () {
-        ConfigBrowser db = new ConfigBrowser();
-        db.promptForBrowser();
-        this.browser = db.getBrowser();
+    private void checkFileSize (String fileName) throws InterruptedException, IOException, ParseException {
+        if (foundFile) {
+            long size1 = currentFile.length();
+            Thread.sleep(2000);
+            long size2 = currentFile.length();
+            if (size1 == size2 && size1 != 0) {
+                Thread.sleep(1000);
+                checkFile(fileName, true);
+            }
+        }
     }
 }
