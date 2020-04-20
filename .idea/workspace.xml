@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a023a14f-def3-4363-bc9f-6fce4806bfe4" name="Default Changelist" comment="">
-      <change beforePath="$USER_HOME$/IdeaProjects/DownloadsManager/.idea/vcs.xml" beforeDir="false" afterPath="$USER_HOME$/IdeaProjects/DownloadsManager/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$USER_HOME$/IdeaProjects/DownloadsManager/.idea/workspace.xml" beforeDir="false" afterPath="$USER_HOME$/IdeaProjects/DownloadsManager/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$USER_HOME$/IdeaProjects/DownloadsManager/README.md" beforeDir="false" afterPath="$USER_HOME$/IdeaProjects/DownloadsManager/README.md" afterDir="false" />
-      <change beforePath="$USER_HOME$/IdeaProjects/DownloadsManager/src/main/java/org/walrus/DownloadsManager/manager/ConfigBrowser.java" beforeDir="false" />
-      <change beforePath="$USER_HOME$/IdeaProjects/DownloadsManager/src/main/java/org/walrus/DownloadsManager/manager/Sorter.java" beforeDir="false" afterPath="$USER_HOME$/IdeaProjects/DownloadsManager/src/main/java/org/walrus/DownloadsManager/manager/Sorter.java" afterDir="false" />
-      <change beforePath="$USER_HOME$/IdeaProjects/DownloadsManager/src/main/java/org/walrus/DownloadsManager/manager/Systray.java" beforeDir="false" afterPath="$USER_HOME$/IdeaProjects/DownloadsManager/src/main/java/org/walrus/DownloadsManager/manager/Systray.java" afterDir="false" />
-      <change beforePath="$USER_HOME$/IdeaProjects/DownloadsManager/src/main/java/org/walrus/DownloadsManager/manager/UI.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,7 +130,7 @@
       <workItem from="1587047757962" duration="15659000" />
       <workItem from="1587128952221" duration="27275000" />
       <workItem from="1587216938891" duration="7371000" />
-      <workItem from="1587337976105" duration="4051000" />
+      <workItem from="1587337976105" duration="4646000" />
     </task>
     <servers />
   </component>
