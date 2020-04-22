@@ -42,6 +42,7 @@ public class Systray {
             MenuItem info = new MenuItem("Info");
             MenuItem reload = new MenuItem("Reload");
             MenuItem exit = new MenuItem("Exit");
+            popup.add("v1.4.3");
             popup.add(folders);
             popup.add(logs);
             popup.add(info);
