@@ -34,4 +34,8 @@ public class UI {
         frame.setVisible(true);
         frame.toFront();
     }
+
+    public void dispose () {
+        this.frame.dispose();
+    }
 }

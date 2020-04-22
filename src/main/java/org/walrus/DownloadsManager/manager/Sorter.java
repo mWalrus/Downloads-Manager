@@ -6,18 +6,14 @@ import org.json.simple.parser.ParseException;
 
 import java.awt.*;
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 import javax.swing.*;
 
 public class Sorter implements IntSorter {
-    JFrame frame;
     File currentFile;
     boolean foundFile;
 
@@ -230,6 +226,8 @@ public class Sorter implements IntSorter {
      */
     @Override
     public void displayDialog(String folderPath, String fileName) throws IOException {
+        UI frame = new UI();
+
         JButton openFolder = new JButton("Open folder");
         JButton openFile = new JButton("Open file");
         JButton close = new JButton("Close");
@@ -271,7 +269,6 @@ public class Sorter implements IntSorter {
         JPanel buttonPanel = new JPanel(new GridLayout(1,3,40,0));
         JPanel outerPanel = new JPanel(new BorderLayout());
 
-        UI frame = new UI();
         frame.createUI(label, options, outerPanel, textPanel, buttonPanel, 500, 170);
     }
 
@@ -297,10 +294,10 @@ public class Sorter implements IntSorter {
     private void checkFileSize (String fileName) throws InterruptedException, IOException, ParseException {
         if (foundFile) {
             long size1 = currentFile.length();
-            Thread.sleep(2000);
+            Thread.sleep(500);
             long size2 = currentFile.length();
             if (size1 == size2 && size1 != 0) {
-                Thread.sleep(1000);
+                Thread.sleep(500);
                 checkFile(fileName, true);
             }
         }
