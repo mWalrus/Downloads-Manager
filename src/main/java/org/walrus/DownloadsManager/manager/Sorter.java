@@ -272,6 +272,13 @@ public class Sorter implements IntSorter {
         frame.createUI(label, options, outerPanel, textPanel, buttonPanel, 500, 170);
     }
 
+    /**
+     * Handles incoming downloads by finding the file being downloaded and preparing for file size comparison
+     * @param events watch key events polled in downloads folder
+     * @throws InterruptedException
+     * @throws ParseException
+     * @throws IOException
+     */
     private void handleDownloads (List<WatchEvent<?>> events) throws InterruptedException, ParseException, IOException {
         String fileName = "";
         for (WatchEvent<?> event : events){
@@ -291,6 +298,14 @@ public class Sorter implements IntSorter {
         checkFileSize(fileName);
     }
 
+    /**
+     * checks file size, waits for .5 seconds and tries again, if the numbers are the same and also larger than 0
+     * the file is finished downloaded
+     * @param fileName String file name
+     * @throws InterruptedException
+     * @throws IOException
+     * @throws ParseException
+     */
     private void checkFileSize (String fileName) throws InterruptedException, IOException, ParseException {
         if (foundFile) {
             long size1 = currentFile.length();
