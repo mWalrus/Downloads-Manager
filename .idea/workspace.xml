@@ -4,8 +4,6 @@
     <list default="true" id="a023a14f-def3-4363-bc9f-6fce4806bfe4" name="Default Changelist" comment="">
       <change beforePath="$USER_HOME$/IdeaProjects/DownloadsManager/.idea/workspace.xml" beforeDir="false" afterPath="$USER_HOME$/IdeaProjects/DownloadsManager/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$USER_HOME$/IdeaProjects/DownloadsManager/pom.xml" beforeDir="false" afterPath="$USER_HOME$/IdeaProjects/DownloadsManager/pom.xml" afterDir="false" />
-      <change beforePath="$USER_HOME$/IdeaProjects/DownloadsManager/src/main/java/org/walrus/DownloadsManager/manager/Sorter.java" beforeDir="false" afterPath="$USER_HOME$/IdeaProjects/DownloadsManager/src/main/java/org/walrus/DownloadsManager/manager/Sorter.java" afterDir="false" />
-      <change beforePath="$USER_HOME$/IdeaProjects/DownloadsManager/src/main/java/org/walrus/DownloadsManager/manager/SorterMain.java" beforeDir="false" afterPath="$USER_HOME$/IdeaProjects/DownloadsManager/src/main/java/org/walrus/DownloadsManager/manager/SorterMain.java" afterDir="false" />
       <change beforePath="$USER_HOME$/IdeaProjects/DownloadsManager/src/main/java/org/walrus/DownloadsManager/manager/Systray.java" beforeDir="false" afterPath="$USER_HOME$/IdeaProjects/DownloadsManager/src/main/java/org/walrus/DownloadsManager/manager/Systray.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -143,7 +141,7 @@
       <workItem from="1587347696690" duration="823000" />
       <workItem from="1587546363160" duration="7529000" />
       <workItem from="1587558483554" duration="1189000" />
-      <workItem from="1587648661800" duration="7663000" />
+      <workItem from="1587648661800" duration="7797000" />
     </task>
     <servers />
   </component>
