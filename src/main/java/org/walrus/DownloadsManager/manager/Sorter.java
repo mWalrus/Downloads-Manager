@@ -16,6 +16,15 @@ import javax.swing.*;
 public class Sorter implements IntSorter {
     File currentFile;
     boolean foundFile;
+    Systray systray;
+
+    Sorter () {
+        try {
+            systray = new Systray(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Listens for user initiated downloads by checking if the Downloads folder is getting modified at any given moment
@@ -55,15 +64,50 @@ public class Sorter implements IntSorter {
             String[] splitTemp = fileName.split("\\.");
             String ext = splitTemp[splitTemp.length - 1].toLowerCase();
             String category = this.findCategory(ext);
+            System.out.println(category);
             Path temp = Paths.get(downloadsPath + "\\" + category);
             if (!Files.exists(temp)) {
                 this.logToFile("info", "Couldn't find folder \"" + category + "\". Trying to create it...");
                 this.createCategoryDirectory(category);
             }
 
+            // when a website is downloaded (from at least firefox) a folder with the site's style is also downloaded
+            // this part handles that folder on a new download
+            if (ext.equals("htm") || ext.equals("html")) {
+                String resourceName = this.checkForResourceFolder(fileName, ext);
+                if (resourceName != null) {
+                    this.sortFileToFolder(category, resourceName, false);
+                }
+            }
+
             this.sortFileToFolder(category, fileName, wasDownloadedNow);
+        } else {
+            // this section handles left over _files folders in downloads and sorts them into the web category
+            if (fileName.matches("(.*)_files$")) {
+                System.out.println(fileName);
+                this.sortFileToFolder("web", fileName, wasDownloadedNow);
+            }
         }
 
+    }
+
+    /**
+     * Checks if the newly downloaded website came with a _files folder, if so the name of the folder is returned
+     * @param fileName name of the web file downloaded
+     * @param ext extension used for removing it from the file name
+     * @return resource folder name
+     */
+    @SuppressWarnings("all")
+    private String checkForResourceFolder(String fileName, String ext) {
+        fileName = fileName.replace("." + ext, "");
+        System.out.println(fileName);
+        for (File file : new File(downloadsPath).listFiles()) {
+            if (file.isDirectory() && file.getName().equals(fileName + "_files")){
+                System.out.println(file.getName());
+                return file.getName();
+            }
+        }
+        return null;
     }
 
     /**
@@ -161,6 +205,7 @@ public class Sorter implements IntSorter {
             }
 
             this.logToFile("info", "Created folder successfully.");
+            systray.reloadTrayMenu();
         } catch (IOException e) {
             this.logToFile("error", e.toString());
         }
@@ -209,9 +254,7 @@ public class Sorter implements IntSorter {
         File[] files = Objects.requireNonNull(downloadsFolder.listFiles());
 
         for (File currentFile : files) {
-            if (!currentFile.isDirectory()) {
-                this.checkFile(currentFile.getName(), false);
-            }
+            this.checkFile(currentFile.getName(), false);
         }
 
         this.logToFile("info", "Done!");

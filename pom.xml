@@ -6,7 +6,7 @@
 
     <groupId>org.walrus</groupId>
     <artifactId>DownloadsManager</artifactId>
-    <version>1.4.3</version>
+    <version>1.4.4</version>
     <dependencies>
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>

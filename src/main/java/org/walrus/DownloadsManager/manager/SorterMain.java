@@ -11,7 +11,6 @@ public class SorterMain extends Sorter {
         UIManager.put("OptionPane.background", Color.decode("#2c2c34"));
         UIManager.put("Panel.background", Color.decode("#2c2c34"));
         Sorter s = new Sorter();
-        new Systray(s);
         s.scanDownloadsFolder();
         s.listenForDownloads();
     }

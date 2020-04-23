@@ -12,6 +12,8 @@ import static org.walrus.DownloadsManager.manager.IntSorter.*;
 
 public class Systray {
     private Sorter s;
+    SystemTray tray;
+    TrayIcon trayIcon;
     Systray (Sorter sorter) throws IOException {
         s = sorter;
         initTrayPopup();
@@ -26,8 +28,8 @@ public class Systray {
         s.logToFile("info", "Initializing System Tray Icon.");
         if (SystemTray.isSupported()) {
             PopupMenu popup = new PopupMenu();
-            TrayIcon trayIcon = new TrayIcon(this.createImage("/logo.png", "Tray Icon"), "Downloads manager");
-            SystemTray tray = SystemTray.getSystemTray();
+            trayIcon = new TrayIcon(this.createImage("/logo.png", "Tray Icon"), "Downloads manager");
+            tray = SystemTray.getSystemTray();
 
             // sub menu for folders in downloads
             Menu folders = new Menu("Open");
@@ -137,5 +139,14 @@ public class Systray {
             if (file.isDirectory()) foundCategories.add(file.getName());
         }
         return foundCategories;
+    }
+
+    public void reloadTrayMenu () {
+        tray.remove(trayIcon);
+        try {
+            initTrayPopup();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
