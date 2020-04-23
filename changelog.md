@@ -1,4 +1,10 @@
 # Changelog
+## [1.5] - 2020-04-23
+### Added
+- Handling for resources being downloaded when a website's source is downloaded
+### Changed
+- Category list under "Open" menu is updated every time a new category is created
+
 ## [1.4.3] - 2020-04-22
 ### Added
 - Version tag in System Tray menu
