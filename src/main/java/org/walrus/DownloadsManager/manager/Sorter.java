@@ -4,13 +4,16 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import org.walrus.DownloadsManager.manager.EventLogger;
+
 import java.awt.*;
 import java.io.*;
 import java.nio.file.*;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 public class Sorter implements IntSorter {
@@ -18,7 +21,13 @@ public class Sorter implements IntSorter {
     boolean foundFile;
     Systray systray;
 
+    private final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
     Sorter () {
+        EventLogger myLogger = new EventLogger();
+        myLogger.setup();
+        LOGGER.setLevel(Level.INFO);
+        LOGGER.info("Starting application");
         try {
             systray = new Systray(this);
         } catch (IOException e) {
@@ -31,8 +40,8 @@ public class Sorter implements IntSorter {
      * @throws IOException
      */
     public void listenForDownloads() throws IOException {
-        this.logToFile("info", "Listening for downloads...");
         try {
+            LOGGER.info("Listening for downloads...");
             WatchService ws = FileSystems.getDefault().newWatchService();
             Path downloads = Paths.get(downloadsPath);
             downloads.register(ws, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY);
@@ -44,7 +53,7 @@ public class Sorter implements IntSorter {
                 wk.reset();
             }
         } catch (InterruptedException | ParseException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.toString());
         }
     }
 
@@ -57,35 +66,40 @@ public class Sorter implements IntSorter {
      * @throws InterruptedException
      */
     public void checkFile(String fileName, boolean wasDownloadedNow) throws IOException, ParseException, InterruptedException {
-        logToFile("info", "Checking if entry is folder...");
+        LOGGER.info("Checking " + fileName);
         File newFile = new File(downloadsPath + "\\" + fileName);
         if (!newFile.isDirectory()) {
-            this.logToFile("info", "Found file is not a folder. Determining category for " + fileName);
+            LOGGER.info("Entry is not a directory, determining file type...");
             String[] splitTemp = fileName.split("\\.");
             String ext = splitTemp[splitTemp.length - 1].toLowerCase();
             String category = this.findCategory(ext);
-            System.out.println(category);
             Path temp = Paths.get(downloadsPath + "\\" + category);
             if (!Files.exists(temp)) {
-                this.logToFile("info", "Couldn't find folder \"" + category + "\". Trying to create it...");
                 this.createCategoryDirectory(category);
             }
 
             // when a website is downloaded (from at least firefox) a folder with the site's style is also downloaded
             // this part handles that folder on a new download
             if (ext.equals("htm") || ext.equals("html")) {
+                LOGGER.info("File downloaded is a web page, looking for resource folder...");
                 String resourceName = this.checkForResourceFolder(fileName, ext);
                 if (resourceName != null) {
                     this.sortFileToFolder(category, resourceName, false);
+                } else {
+                    LOGGER.info("Did not find any resources");
                 }
             }
 
             this.sortFileToFolder(category, fileName, wasDownloadedNow);
         } else {
+            LOGGER.info("Entry is a folder, checking if it is an unhandled resource folder.");
             // this section handles left over _files folders in downloads and sorts them into the web category
             if (fileName.matches("(.*)_files$")) {
+                LOGGER.info("File is a resource folder, sorting");
                 System.out.println(fileName);
                 this.sortFileToFolder("web", fileName, wasDownloadedNow);
+            } else {
+                LOGGER.info("File is not a resource folder, skipping.");
             }
         }
 
@@ -100,10 +114,9 @@ public class Sorter implements IntSorter {
     @SuppressWarnings("all")
     private String checkForResourceFolder(String fileName, String ext) {
         fileName = fileName.replace("." + ext, "");
-        System.out.println(fileName);
         for (File file : new File(downloadsPath).listFiles()) {
             if (file.isDirectory() && file.getName().equals(fileName + "_files")){
-                System.out.println(file.getName());
+                LOGGER.info("Found " + file.getName());
                 return file.getName();
             }
         }
@@ -119,13 +132,11 @@ public class Sorter implements IntSorter {
      * @throws InterruptedException
      */
     public void sortFileToFolder(String folderToMoveTo, String fileName, boolean wasDownloadedNow) throws IOException, InterruptedException {
-        this.logToFile("info", "Moving file to \"" + folderToMoveTo + "\" folder.");
-
+        LOGGER.info("Sorting " + fileName + " to \"" + folderToMoveTo + "\"");
         try {
             Files.move(Paths.get(downloadsPath + "\\" + fileName), Paths.get(downloadsPath + "\\" + folderToMoveTo + "\\" + fileName), StandardCopyOption.REPLACE_EXISTING);
-            this.logToFile("info", "Moved file successfully.");
         } catch (IOException e) {
-            this.logToFile("error", e.toString());
+            LOGGER.severe(e.toString());
         }
 
         if (wasDownloadedNow) {
@@ -146,6 +157,7 @@ public class Sorter implements IntSorter {
      * @throws ParseException
      */
     public String findCategory(String extension) throws IOException, ParseException {
+        LOGGER.info("Beginning categorization");
         boolean foundCategory = false;
         String category = "";
         JSONObject categories = getCategories();
@@ -158,15 +170,15 @@ public class Sorter implements IntSorter {
                 if (extension.equals(ext)) {
                     category = currentCategory.toString();
                     foundCategory = true;
-                    logToFile("info", "Found category \"" + category + "\" for file with ." + extension + " extension.");
+                    LOGGER.info("Found category " + category + " for " + extension + " extension");
                     break;
                 }
             }
             if (foundCategory) break;
         }
         if (!foundCategory) {
+            LOGGER.info("Could not find a category for " + extension + " extension, sorting in Other");
             category = "other";
-            logToFile("info", "Couldn't find category for ." + extension +", sorting in \"Other\"");
         }
         return category;
     }
@@ -178,6 +190,7 @@ public class Sorter implements IntSorter {
      * @throws ParseException
      */
     public JSONObject getCategories() throws IOException, ParseException {
+        LOGGER.info("Getting categories...");
         InputStream input = Sorter.class.getResourceAsStream("/categories.json");
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         StringBuilder builder = new StringBuilder();
@@ -187,50 +200,30 @@ public class Sorter implements IntSorter {
         }
         String jsonString = builder.toString();
         JSONObject object = (JSONObject) new JSONParser().parse(jsonString);
+        LOGGER.info("Done getting categories");
         return (JSONObject) object.get("categories");
     }
 
     /**
      * If the category folder is nonexistent a new folder is created with it's name
      * @param dirName Name of the directory which will be created
-     * @throws IOException
      */
-    public void createCategoryDirectory(String dirName) throws IOException {
+    public void createCategoryDirectory (String dirName) {
+        LOGGER.info("Trying to create category folder...");
         try {
             String capDirName = dirName.substring(0, 1).toUpperCase() + dirName.substring(1);
             File newDir = new File(downloadsPath + "\\" + capDirName);
             boolean created = newDir.mkdir();
             if (!created) {
                 throw new IOException();
+            } else {
+                LOGGER.info("Folder successfully created");
             }
-
-            this.logToFile("info", "Created folder successfully.");
             systray.reloadTrayMenu();
         } catch (IOException e) {
-            this.logToFile("error", e.toString());
+            LOGGER.severe(e.toString());
         }
 
-    }
-
-    /**
-     * Logs events to text file
-     * @param type type of message
-     * @param message message to be logged
-     * @throws IOException
-     */
-    @SuppressWarnings("all")
-    public void logToFile(String type, String message) throws IOException {
-        File logs = new File(logsPath);
-        logs.getParentFile().mkdirs();
-        logs.createNewFile();
-        LocalDateTime dt = LocalDateTime.now();
-
-        String entry = dtf.format(dt) + " [" + type.toUpperCase() + "] " + message;
-
-        BufferedWriter writer = new BufferedWriter(new FileWriter(logsPath, true));
-        writer.write(entry);
-        writer.newLine();
-        writer.close();
     }
 
     /**
@@ -239,6 +232,7 @@ public class Sorter implements IntSorter {
      * @throws IOException
      */
     public void openPath(String path) throws IOException {
+        LOGGER.info("Opening " + path);
         Desktop.getDesktop().open(new File(path));
     }
 
@@ -249,15 +243,14 @@ public class Sorter implements IntSorter {
      * @throws InterruptedException
      */
     public void scanDownloadsFolder() throws IOException, ParseException, InterruptedException {
-        this.logToFile("info", "Scanning Downloads folder for unhandled files...");
+        LOGGER.info("Scanning Downloads folder");
         File downloadsFolder = new File(downloadsPath);
         File[] files = Objects.requireNonNull(downloadsFolder.listFiles());
 
         for (File currentFile : files) {
+            LOGGER.info("Found file " + currentFile.getName());
             this.checkFile(currentFile.getName(), false);
         }
-
-        this.logToFile("info", "Done!");
     }
 
     /**
@@ -265,12 +258,13 @@ public class Sorter implements IntSorter {
      * (open folder of newly downloaded file, open that file with standard application or close window)
      * @param folderPath folder to open
      * @param fileName file to open
-     * @throws IOException
      */
     @Override
-    public void displayDialog(String folderPath, String fileName) throws IOException {
+    public void displayDialog (String folderPath, String fileName) {
+        LOGGER.info("Preparing prompt UI");
         UI frame = new UI();
 
+        LOGGER.info("Generating options");
         JButton openFolder = new JButton("Open folder");
         JButton openFile = new JButton("Open file");
         JButton close = new JButton("Close");
@@ -288,30 +282,34 @@ public class Sorter implements IntSorter {
             b.setSize(new Dimension(80, 20));
         }
 
+        LOGGER.info("Adding action listeners");
         openFolder.addActionListener(e -> {
             try {
                 this.openPath(folderPath);
             } catch (IOException ex) {
-                ex.printStackTrace();
+                LOGGER.severe(ex.toString());
             }
         });
         openFile.addActionListener(e -> {
             try {
                 this.openPath(folderPath + "\\" + fileName);
             } catch (IOException ex) {
-                ex.printStackTrace();
+                LOGGER.severe(ex.toString());
             }
         });
         close.addActionListener(e -> frame.dispose());
 
+        LOGGER.info("Creating label");
         JLabel label = new JLabel("<html>" + fileName + " was downloaded. <br>Select action:<html>", SwingConstants.CENTER);
         label.setForeground(Color.decode("#fffaff"));
         label.setBackground(Color.decode("#2c2c34"));
 
+        LOGGER.info("Setting button borders");
         JPanel textPanel = new JPanel(new BorderLayout());
         JPanel buttonPanel = new JPanel(new GridLayout(1,3,40,0));
         JPanel outerPanel = new JPanel(new BorderLayout());
 
+        LOGGER.info("Creating UI");
         frame.createUI(label, options, outerPanel, textPanel, buttonPanel, 500, 170);
     }
 
@@ -327,8 +325,9 @@ public class Sorter implements IntSorter {
         for (WatchEvent<?> event : events){
             String[] split = event.context().toString().split("\\.");
             String temp = split[split.length - 1];
-            if (!temp.equals("tmp") && !temp.equals("crdownload") && !temp.equals(".part")) {
+            if (!temp.equals("tmp") && !temp.equals("crdownload") && !temp.equals("part")) {
                 fileName = event.context().toString();
+                LOGGER.info("Found file " + fileName);
             }
         }
         if (fileName.length() > 0 && !foundFile) {
@@ -352,9 +351,12 @@ public class Sorter implements IntSorter {
     private void checkFileSize (String fileName) throws InterruptedException, IOException, ParseException {
         if (foundFile) {
             long size1 = currentFile.length();
-            Thread.sleep(500);
+            LOGGER.info("File size before: " + size1);
+            Thread.sleep(1500);
             long size2 = currentFile.length();
+            LOGGER.info("File size before: " + size2);
             if (size1 == size2 && size1 != 0) {
+                LOGGER.info("File size is the same, assuming " + fileName + " is done downloading");
                 Thread.sleep(500);
                 checkFile(fileName, true);
             }

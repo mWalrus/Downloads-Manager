@@ -14,6 +14,6 @@
     "system": ["pak","cab","cfg","cpl","cur","dll","dmp","drv","icns","ini","ink","sys","tmp"],
     "text": ["doc","docx","odt","pdf","rtf","tex","txt","wpd"],
     "video": ["3g2","3gp","avi","flv","h264","m4v","mkv","mov","mp4","mpg","mpeg","rm","swf","vob","wmv"],
-    "web": ["asp","aspx","cer","cfm","cgi","pl","css","htm","html","js","jsp","part","php","py","rss","xhtml"]
+    "web": ["asp","aspx","cer","cfm","cgi","pl","css","htm","html","js","jsp","php","py","rss","xhtml"]
   }
 }

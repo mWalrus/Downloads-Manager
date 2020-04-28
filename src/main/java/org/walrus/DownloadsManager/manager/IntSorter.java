@@ -29,8 +29,6 @@ public interface IntSorter {
 
     void createCategoryDirectory(String var1) throws IOException;
 
-    void logToFile(String type, String message) throws IOException;
-
     void openPath(String filePath) throws IOException;
 
     void scanDownloadsFolder() throws IOException, ParseException, InterruptedException;
